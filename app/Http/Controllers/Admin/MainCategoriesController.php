@@ -44,7 +44,7 @@ class MainCategoriesController extends Controller
             DB::beginTransaction();
                 $default_category_id = MainCategory::insertGetId([
                     'translation_lang' => $default_category['abbr'],
-                    'transaltion_of' => 0,
+                    'translation_of' => 0,
                     'name' => $default_category['name'],
                     'slug' => $default_category['name'],
                     'photo' => $filepath,
@@ -58,7 +58,7 @@ class MainCategoriesController extends Controller
                     foreach ($categories as $category) {
                         $categories_arr[] = [
                             'translation_lang' => $category['abbr'],
-                            'transaltion_of' => $default_category_id,
+                            'translation_of' => $default_category_id,
                             'name' => $category['name'],
                             'slug' => $category['name'],
                             'photo' => $filepath,
@@ -123,18 +123,33 @@ class MainCategoriesController extends Controller
 
 
     ################### end update categories ###############################
-    public function destroy($id){
-        try {
-            $language=Language::find($id);
-            if(!$language){
-                return redirect() ->route('admin.languages.edit',$id)->with(['error'=>'this language not esist']);
-            }
-            $language->delete();
-            return redirect()->route('admin.languages')->with(['success'=>'languages deleted successfuly']);
-        }catch(\Exception $ex){
-            return redirect()->route('admin.languages')->with(['error'=>'some thing went rongs']);
-        }
 
+
+
+
+    public function destroy($id)
+    {
+
+        try {
+            $maincategory = MainCategory::find($id);
+            if (!$maincategory)
+                return redirect()->route('admin.maincategories')->with(['error' => 'هذا القسم غير موجود ']);
+
+            $vendors = $maincategory->vendors();
+            if (isset($vendors) && $vendors->count() > 0) {
+                return redirect()->route('admin.maincategories')->with(['error' => 'لأ يمكن حذف هذا القسم  ']);
+            }
+
+            $image = Str::after($maincategory->photo, 'assets/');
+            $image = base_path('assets/' . $image);
+            unlink($image); //delete from folder
+
+            $maincategory->delete();
+            return redirect()->route('admin.maincategories')->with(['success' => 'تم حذف القسم بنجاح']);
+
+        } catch (\Exception $ex) {
+            return redirect()->route('admin.maincategories')->with(['error' => 'حدث خطا ما برجاء المحاوله لاحقا']);
+        }
     }
 
 
