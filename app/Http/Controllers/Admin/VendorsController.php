@@ -6,7 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\VendorRequest;
 use App\Models\MainCategory;
 use App\Models\Vendor;
-use Illuminate\Http\Request;
+use App\Notifications\VendorCreated;
+use Illuminate\Support\Facades\Notification;
 use mysql_xdevapi\Exception;
 
 class VendorsController extends Controller
@@ -33,7 +34,7 @@ class VendorsController extends Controller
             if($request->has('logo')){
                 $filePath= uploadeImage('vendors',$request->logo);
             }
-            Vendor::create([
+           $vendor= Vendor::create([
                'name'=>$request->name,
                'mobile'=>$request->mobile,
                'email'=>$request->email,
@@ -43,6 +44,7 @@ class VendorsController extends Controller
                'address'=>$request->address,
 
             ]);
+            Notification::send($vendor, new VendorCreated($vendor));
             return redirect()->route('admin.vendors')->with(['success'=>'تم الحفظ بنجاح']);
         }catch(\Exception $e){
             return($e);
