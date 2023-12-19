@@ -54,6 +54,12 @@ return [
             'url' => env('APP_URL').'/public',
             'visibility' => 'public',
         ],
+        'vendors' => [
+            'driver' => 'local',
+            'root' => base_path().'/public/assets/images/vendors/',
+            'url' => env('APP_URL').'/public',
+            'visibility' => 'public',
+        ],
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
