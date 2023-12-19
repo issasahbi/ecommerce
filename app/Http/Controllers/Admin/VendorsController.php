@@ -40,6 +40,7 @@ class VendorsController extends Controller
                'email'=>$request->email,
                'active'=>$request->active,
                'logo'=>$filePath,
+               'password'=>$request->password,
                'category_id'=>$request->category_id,
                'address'=>$request->address,
 
@@ -47,8 +48,46 @@ class VendorsController extends Controller
             Notification::send($vendor, new VendorCreated($vendor));
             return redirect()->route('admin.vendors')->with(['success'=>'تم الحفظ بنجاح']);
         }catch(\Exception $e){
-            return($e);
+           // return($e);
             return redirect()->route('admin.vendors')->with(['error'=>'حدث خطأ ما الرجاء المحاولة لاحقا']);
         }
+    }
+
+    public function edit($id){
+        try {
+            $categories=MainCategory::where('translation_lang',get_default_lang())->active()->get();
+            $vendor=Vendor::selection()->find($id);
+            if (!$vendor)
+                return redirect()->route('admin.vendors')->with(['error'=>'حدث خطأ ما الرجاء المحاولة لاحقا']);
+            //return $vendor;
+            return view('admin.vendors.edit',compact('vendor','categories'));
+        }catch(\exception $e){
+            return $e;
+            return redirect()->route('admin.vendors')->with(['error'=>'حدث خطأ ما الرجاء المحاولة لاحقا']);
+        }
+    }
+
+    public function update ($id, VendorRequest $request){
+        try {
+            $vendor=Vendor::selection()->find($id);
+            if (!$vendor)
+                return redirect()->route('admin.vendors')->with(['error'=>'حدث خطأ ما الرجاء المحاولة لاحقا']);
+            $data=$request->except('_token','id','logo','password');
+            // --------- add logo -------------
+            if($request->has('logo')){
+                $filepath=uploadeImage('vendors',$request->logo);
+                $data['logo']=$filepath;
+            }
+            // --------- add password -------------
+            if($request->has('password')) {
+                $data['password']=$request->password;
+            }
+            Vendor::where('id',$id)->update($data);
+            return redirect()->route('admin.vendors')->with(['success'=>'تم التعديل بنجاح']);
+        }catch(\exception $e){
+            return $e;
+            return redirect()->route('admin.vendors')->with(['error'=>'حدث خطأ ما الرجاء المحاولة لاحقا']);
+        }
+
     }
 }
