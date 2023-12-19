@@ -9,13 +9,13 @@ class Vendor extends Model
 {
     use Notifiable;
     protected $table = 'vendors';
-    protected $fillable=['mobile','address','name','email','category_id','logo','active','created_at','updated_at'];
+    protected $fillable=['mobile','address','password','name','email','category_id','logo','active','created_at','updated_at'];
 
     public function scopeActive($q){
         return $q->where('active',1);
     }
     public function scopeSelection($q){
-        return $q-> select('id','name','category_id','logo','mobile','active');
+        return $q-> select('id','name','address','category_id','email','logo','mobile','active');
     }
     // Accessor to Logo
     public function getLogoAttribute($val){
@@ -30,4 +30,10 @@ class Vendor extends Model
         return $this->belongsTo('App\Models\MainCategory','category_id','id');
     }
 
+    public function setPasswordAttribute($val)
+    {
+        if (!empty($val)) {
+             $this->attributes['password'] = bcrypt($val);
+        }
+    }
 }
