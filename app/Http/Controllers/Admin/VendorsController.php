@@ -85,7 +85,7 @@ class VendorsController extends Controller
             Vendor::where('id',$id)->update($data);
             return redirect()->route('admin.vendors')->with(['success'=>'تم التعديل بنجاح']);
         }catch(\exception $e){
-            return $e;
+            //return $e;
             return redirect()->route('admin.vendors')->with(['error'=>'حدث خطأ ما الرجاء المحاولة لاحقا']);
         }
 
