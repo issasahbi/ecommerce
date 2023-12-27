@@ -34,6 +34,7 @@ class MainCategory extends Model
     public function vendors(){
         return $this->hasMany('App\Models\Vendor','category_id','id');
     }
+
     protected static function boot()
     {
         parent::boot();
