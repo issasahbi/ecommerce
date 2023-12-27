@@ -153,7 +153,7 @@ class MainCategoriesController extends Controller
         }
     }
 
-    public function changeStatus(){
+    public function changeStatus($id){
         try {
             $maincategory = MainCategory::find($id);
             if (!$maincategory)
