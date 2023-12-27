@@ -8,6 +8,7 @@ use App\Models\MainCategory;
 use App\Models\Vendor;
 use App\Notifications\VendorCreated;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Str;
 use mysql_xdevapi\Exception;
 
 class VendorsController extends Controller
@@ -88,6 +89,22 @@ class VendorsController extends Controller
             //return $e;
             return redirect()->route('admin.vendors')->with(['error'=>'حدث خطأ ما الرجاء المحاولة لاحقا']);
         }
+    }
+    public function destroy($id){
+        try {
+            $vendor=Vendor::find($id);
+            if(!$vendor)
+                return redirect()->route('admin.vendors')->with(['error'=>"حدث خطأ ما الرجاء المحاولة لاحقا"]);
+            // ---------- delete image of the vendor from the folder ----------------------
+            $image = Str::after($vendor->logo, 'assets/');
+            $image = base_path('public/assets/' . $image);
+            unlink($image); //delete from folder
 
+            $vendor->delete();
+            return redirect()->route('admin.vendors')->with(['success' => 'تم حذف المتجر بنجاح']);
+        }catch(\Exception $ex){
+            //return $ex;
+            return redirect()->route('admin.vendors')->with(['error'=>"حدث خطأ ما الرجاء المحاولة لاحقا"]);
+        }
     }
 }
