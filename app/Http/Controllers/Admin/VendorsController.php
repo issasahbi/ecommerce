@@ -107,4 +107,16 @@ class VendorsController extends Controller
             return redirect()->route('admin.vendors')->with(['error'=>"حدث خطأ ما الرجاء المحاولة لاحقا"]);
         }
     }
+    public function changeStatus($id){
+        try {
+            $vendor = Vendor::find($id);
+            if (!$vendor)
+                return redirect()->route('admin.vendors')->with(['error' => 'هذا القسم غير موجود ']);
+            $status=$vendor->active == ' غير مفعل' ? 1 : 0 ;
+            $vendor->update(['active'=>$status]);
+            return redirect()->route('admin.vendors')->with(['success' => 'تم تعديل الحالة بنجاح']);
+        }catch (\Exception $ex) {
+            return redirect()->route('admin.vendors')->with(['error' => 'حدث خطا ما برجاء المحاوله لاحقا']);
+        }
+    }
 }

@@ -79,8 +79,14 @@
                                                                    class="btn btn-outline-danger btn-min-width box-shadow-3 mr-1 mb-1">حذف</a>
 
 
-                                                                <a href=""
-                                                                   class="btn btn-outline-warning btn-min-width box-shadow-3 mr-1 mb-1">تفعيل</a>
+                                                                <a href="{{route('admin.vendors.status',$vendor -> id)}}"
+                                                                   class="btn btn-outline-warning btn-min-width box-shadow-3 mr-1 mb-1">
+                                                                    @if ($vendor -> active == ' غير مفعل')
+                                                                    تفعيل
+                                                                    @else
+                                                                     إلغاء التفعيل
+                                                                    @endif
+                                                                </a>
 
 
                                                             </div>
