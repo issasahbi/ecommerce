@@ -37,7 +37,7 @@ Route::Group(['middleware'=>'auth:admin','namespace'=>'Admin'], function (){
 ################################ end Langauges Routes ############################
 
 
-    ################################ Begin Categories Routes ############################
+################################ Begin Categories Routes ############################
     Route::Group(['prefix'=>'main_categories'], function (){
         Route::get('/','MainCategoriesController@index')->name('admin.maincategories');
         Route::get('create','MainCategoriesController@create')->name('admin.maincategories.create');
@@ -47,7 +47,7 @@ Route::Group(['middleware'=>'auth:admin','namespace'=>'Admin'], function (){
         Route::get('delete/{id}','MainCategoriesController@destroy')->name('admin.maincategories.delete');
         Route::get('changeStatus/{id}','MainCategoriesController@changeStatus')->name('admin.maincategories.status');
     }) ;
-################################ end Langauges Routes ############################
+################################ end Categories Routes ############################
 
 #################################### Begin Vendors Routes ############################
 
@@ -63,6 +63,17 @@ Route::Group(['middleware'=>'auth:admin','namespace'=>'Admin'], function (){
 
 ################################ end Vendors Routes ############################
 
+################################ Begin SubCategories Routes ############################
+    Route::Group(['prefix'=>'sub_categories'], function (){
+        Route::get('/','SubCategoriesController@index')->name('admin.subcategories');
+        Route::get('create','SubCategoriesController@create')->name('admin.subcategories.create');
+        Route::post('store','SubCategoriesController@store')->name('admin.subcategories.store');
+        Route::get('edit/{id}','SubCategoriesController@edit')->name('admin.subcategories.edit');
+        Route::post('update/{id}','SubCategoriesController@update')->name('admin.subcategories.update');
+        Route::get('delete/{id}','SubCategoriesController@destroy')->name('admin.subcategories.delete');
+        Route::get('changeStatus/{id}','SubCategoriesController@changeStatus')->name('admin.subcategories.status');
+    }) ;
+################################ end SubCategories Routes ############################
 
 
 });

@@ -27,8 +27,14 @@ class MainCategory extends Model
         return $this->active ==1 ?'مفعل':'غير مفعل' ;
     }
 
+// *********************** get all translation categories *********************
     public function categories(){
         return $this->hasMany(self::class,'translation_of');
+    }
+
+// ***********************  get all subCategories *********************************
+    public function subcategories(){
+        return $this->hasMany('App\Models\SubCategory','category_id','id');
     }
 
     public function vendors(){
